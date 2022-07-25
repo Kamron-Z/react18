@@ -2,22 +2,21 @@ import classes from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogsItem";
 import MessageItem from "./MessageItem/MessageItem";
 
-const Dialogs = () => {
+const Dialogs = (props) => {
 
-    let dialogs = [
-        {id: 1, name: 'Ahmad'},
-        {id: 2, name: 'Damir'},
-        {id: 3, name: 'Karim'}
-    ]
-    let messages = [
-        {id: 1, message: 'Lorem ipsum dolor.'},
-        {id: 2, message: 'Lorem ipsum dolor.'},
-        {id: 3, message: 'Lorem ipsum dolor.'},
-    ]
+    let dialogsElements = props.state.dialogs.map(d => <DialogItem name={d.name} id={d.id} key={d.id}/>)
+    let messagesElements = props.state.messages.map(m => <MessageItem message={m.message} key={m.id}/>)
 
-    let dialogsElements = dialogs.map(d => <DialogItem name={d.name} id={d.id} key={d.id}/>)
+    let text;
 
-    let messagesElements = messages.map(m => <MessageItem message={m.message} key={m.id}/>)
+    const changeMessage = (e) => {
+        text = e.target.value
+    }
+
+    let addMessage = () => {
+        props.addNewMessage(text)
+        console.log(props.state.messages)
+    }
 
     return (
         <div className={classes.dialogs}>
@@ -26,6 +25,12 @@ const Dialogs = () => {
             </div>
             <div className={classes.messages}>
                 {messagesElements}
+                <div>
+                    <div><input onChange={changeMessage} type="text"/></div>
+                    <div>
+                        <button onClick={addMessage}>add Message</button>
+                    </div>
+                </div>
             </div>
         </div>
     );

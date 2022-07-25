@@ -5,7 +5,8 @@ import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
 import Dialogs from "./components/Dialogs/Dialogs";
 
-const App = () => {
+const App = (props) => {
+
     return (
         <BrowserRouter>
             <div className="App">
@@ -13,8 +14,12 @@ const App = () => {
                 <Navbar/>
                 <div className='main'>
                     <Routes>
-                        <Route path='/profile' element={<Profile/>}/>
-                        <Route path='/dialogs/' element={<Dialogs/>}/>
+                        <Route path='/profile' element={<Profile
+                            state={props.state.profilePage}
+                            addNewPost={props.addNewPost}/>}/>
+                        <Route path='/dialogs/' element={<Dialogs
+                            state={props.state.dialogsPage}
+                            addNewMessage={props.addNewMessage}/>}/>
                     </Routes>
                 </div>
             </div>

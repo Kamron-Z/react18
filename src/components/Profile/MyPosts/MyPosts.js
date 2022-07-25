@@ -1,23 +1,26 @@
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
 
-const MyPosts = () => {
+const MyPosts = (props) => {
 
-    let posts = [
-        {id: 1, message: 'hi, how are you', likeCount: 15},
-        {id: 2, message: 'hi, what is up', likeCount: 10},
-        {id: 3, message: 'hi, what is up', likeCount: 24},
-        {id: 4, message: 'hi, what is up', likeCount: 24},
-    ]
+    let postsElements = props.posts.map(p => <Post message={p.message} likeCount={p.likeCount} key={p.id}/>)
 
-    let postsElements = posts.map( p =>  <Post message={p.message} likeCount={p.likeCount} key={p.id}/>)
+    let text;
+
+    let changePost = (e) => {
+        text = e.target.value
+    }
+
+    let addPost = () => {
+        props.addNewPost(text)
+    }
 
     return (
         <div>
             <div>
-                <div><input type="text"/></div>
+                <div><input onChange={changePost} type="text"/></div>
                 <div>
-                    <button>Add post</button>
+                    <button onClick={addPost}>Add post</button>
                 </div>
             </div>
             <div>
