@@ -1,4 +1,6 @@
-import {rerender} from "../render";
+let rerender = () => {
+    console.log('changed')
+}
 
 let state = {
     profilePage: {
@@ -7,7 +9,8 @@ let state = {
             {id: 2, message: 'hi, what is up', likeCount: 10},
             {id: 3, message: 'hi, what is up', likeCount: 24},
             {id: 4, message: 'hi, what is up', likeCount: 24},
-        ]
+        ],
+        newPostText: ''
     },
     dialogsPage: {
         dialogs: [
@@ -23,15 +26,22 @@ let state = {
     }
 }
 
-export let addNewPost = (newText) => {
+export let addNewPost = () => {
     let newPost = {
         id: state.profilePage.posts.length + 1,
-        message: newText,
+        message: state.profilePage.newPostText,
         likeCount: 0
     }
     state.profilePage.posts.push(newPost)
+    state.profilePage.newPostText = ''
     rerender(state)
 }
+
+export let changePostText = (newText) => {
+    state.profilePage.newPostText = newText
+    rerender(state)
+}
+
 
 export let addNewMessage = (newText) => {
     let newMessage = {
@@ -40,6 +50,10 @@ export let addNewMessage = (newText) => {
     }
     state.dialogsPage.messages.push(newMessage)
     rerender(state)
+}
+
+export const subscribe = (observer) => {
+    rerender = observer
 }
 
 export default state
