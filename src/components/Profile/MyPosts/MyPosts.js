@@ -1,6 +1,6 @@
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
-import {addPostAC, updatePostTextAC} from "../../../redux/state";
+import {addPostAC, updatePostTextAC} from "../../../redux/profile-reducer";
 
 
 
