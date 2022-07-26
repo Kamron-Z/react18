@@ -1,18 +1,19 @@
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
+import {addPostAC, updatePostTextAC} from "../../../redux/state";
+
+
 
 const MyPosts = (props) => {
     let postsElements = props.posts.map(p => <Post message={p.message} likeCount={p.likeCount} key={p.id}/>)
 
-    let text;
-
     let changePost = (e) => {
-        text = e.target.value
-        props.changePostText(text)
+        let text = e.target.value
+        props.dispatch(updatePostTextAC(text))
     }
 
     let addPost = () => {
-        props.addNewPost()
+        props.dispatch(addPostAC())
     }
 
     return (
