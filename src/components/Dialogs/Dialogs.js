@@ -1,20 +1,18 @@
 import classes from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogsItem";
 import MessageItem from "./MessageItem/MessageItem";
-import {addMessageAC, updateMessageTextAC} from "../../redux/dialogs-reducer";
 
 const Dialogs = (props) => {
-
     let dialogsElements = props.state.dialogs.map(d => <DialogItem name={d.name} id={d.id} key={d.id}/>)
     let messagesElements = props.state.messages.map(m => <MessageItem message={m.message} key={m.id}/>)
 
     const changeMessage = (e) => {
         let text = e.target.value
-        props.dispatch(updateMessageTextAC(text))
+        props.updateMessage(text)
     }
 
     let addMessage = () => {
-        props.dispatch(addMessageAC())
+        props.sendMessage()
     }
 
     return (

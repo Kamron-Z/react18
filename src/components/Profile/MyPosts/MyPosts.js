@@ -1,19 +1,16 @@
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
-import {addPostAC, updatePostTextAC} from "../../../redux/profile-reducer";
-
-
 
 const MyPosts = (props) => {
     let postsElements = props.posts.map(p => <Post message={p.message} likeCount={p.likeCount} key={p.id}/>)
 
     let changePost = (e) => {
         let text = e.target.value
-        props.dispatch(updatePostTextAC(text))
+        props.updatePostText(text)
     }
 
     let addPost = () => {
-        props.dispatch(addPostAC())
+        props.addPost()
     }
 
     return (
