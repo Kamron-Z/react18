@@ -1,6 +1,5 @@
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
-import {changePostText} from "../../../redux/state";
 
 const MyPosts = (props) => {
     let postsElements = props.posts.map(p => <Post message={p.message} likeCount={p.likeCount} key={p.id}/>)
@@ -9,7 +8,7 @@ const MyPosts = (props) => {
 
     let changePost = (e) => {
         text = e.target.value
-        changePostText(text)
+        props.changePostText(text)
     }
 
     let addPost = () => {

@@ -1,17 +1,19 @@
 import React from 'react';
 import './index.css';
-import state, {subscribe} from './redux/state'
+import store , {subscribe} from './redux/state'
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import {addNewMessage, addNewPost, changePostText} from "./redux/state";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const rerender = () => {
     root.render(
-        <App state={state} addNewPost={addNewPost} addNewMessage={addNewMessage} changePostText={changePostText}/>
+        <App state={store.getState()}
+             changePostText={store.changePostText.bind(store)}
+             addNewPost={store.addNewPost.bind(store)}
+             addNewMessage={store.addNewMessage.bind(store)}/>
     );
 }
 
 rerender()
-subscribe(rerender)
+store.subscribe(rerender)
