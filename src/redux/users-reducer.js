@@ -3,12 +3,14 @@ const UNFOLLOW = "UNFOLLOW"
 const SET_USERS = "SET_USERS"
 const SET_PAGE = "SET_PAGE"
 const SET_TOTAL_PAGE = "SET_TOTAL_PAGE"
+const IS_FETCHING = "IS_FETCHING"
 
 let initialState = {
     users: [],
     pageSize: 5,
     totalUsersCount: 19,
-    currentPage: 1
+    currentPage: 1,
+    isFetching: false
 }
 
 const usersReducer = (state = initialState, action) => {
@@ -47,6 +49,10 @@ const usersReducer = (state = initialState, action) => {
             return {
                 ...state, totalUsersCount: action.totalPage
             }
+        case IS_FETCHING:
+            return {
+                ...state, isFetching: action.isFetching
+            }
         default:
             return state
     }
@@ -57,5 +63,6 @@ export const unFollowAC = (userId) => ({type: UNFOLLOW, userId: userId})
 export const setUsersAC = (users) => ({type: SET_USERS, users: users})
 export const setPageAC = (pageNum) => ({type: SET_PAGE, pageNum: pageNum})
 export const setTotalPageAC = (totalPage) => ({type: SET_TOTAL_PAGE, totalPage})
+export const isFetchingAC = (isFetching) => ({type: IS_FETCHING, isFetching})
 
 export default usersReducer
