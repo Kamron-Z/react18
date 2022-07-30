@@ -1,9 +1,9 @@
 import {connect} from "react-redux";
-import {followAC, isFetchingAC, setPageAC, setTotalPageAC, setUsersAC, unFollowAC} from "../../redux/users-reducer";
+import {follow, setIsFetching, setPage, setTotalPage, setUsers, unFollow} from "../../redux/users-reducer";
 import React from "react";
 import axios from "axios";
 import Users from "./Users";
-import loading from '../../assest/images/loading.gif'
+import Preloader from "../../common/Preloader/Preloader";
 
 class UsersApiContainer extends React.Component {
 
@@ -31,11 +31,11 @@ class UsersApiContainer extends React.Component {
     render() {
         return (
             <>
-                {this.props.isFetching ? <img src={loading}/> : <Users totalUsersCount={this.props.totalUsersCount}
+                {this.props.isFetching ? <Preloader /> : <Users totalUsersCount={this.props.totalUsersCount}
                            pageSize={this.props.pageSize}
                            currentPage={this.props.currentPage}
                            users={this.props.users}
-                           unfollow={this.props.unfollow}
+                           unfollow={this.props.unFollow}
                            follow={this.props.follow}
                            onChangePage={this.onChangePage}
                     />}
@@ -57,17 +57,19 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        follow: (userId) => dispatch(followAC(userId)),
-        unfollow: (userId) => dispatch(unFollowAC(userId)),
-        setUsers: (users) => dispatch(setUsersAC(users)),
-        setPage: (pageNum) => dispatch(setPageAC(pageNum)),
-        setTotalPage: (totalPage) => dispatch(setTotalPageAC(totalPage)),
-        setIsFetching: (isFetching) => dispatch(isFetchingAC(isFetching))
-    }
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         follow: (userId) => dispatch(followAC(userId)),
+//         unfollow: (userId) => dispatch(unFollowAC(userId)),
+//         setUsers: (users) => dispatch(setUsersAC(users)),
+//         setPage: (pageNum) => dispatch(setPageAC(pageNum)),
+//         setTotalPage: (totalPage) => dispatch(setTotalPageAC(totalPage)),
+//         setIsFetching: (isFetching) => dispatch(isFetchingAC(isFetching))
+//     }
+// }
 
-let UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersApiContainer)
+let UsersContainer = connect(mapStateToProps, {
+    follow, unFollow,  setUsers, setPage, setTotalPage, setIsFetching
+})(UsersApiContainer)
 
 export default UsersContainer
