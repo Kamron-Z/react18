@@ -4,19 +4,21 @@ const SET_USERS = "SET_USERS"
 const SET_PAGE = "SET_PAGE"
 const SET_TOTAL_PAGE = "SET_TOTAL_PAGE"
 const IS_FETCHING = "IS_FETCHING"
+const FETCHING_IN_PROGRESS = "FETCHING_IN_PROGRESS"
 
 let initialState = {
     users: [],
     pageSize: 5,
     totalUsersCount: 19,
     currentPage: 1,
-    isFetching: false
+    isFetching: false,
+    fetchingInProgress: []
 }
 
 const usersReducer = (state = initialState, action) => {
     switch (action.type) {
         case FOLLOW:
-                        return {
+            return {
                 ...state,
                 users: state.users.map(u => {
                     if (u.id === action.userId) {
@@ -41,7 +43,7 @@ const usersReducer = (state = initialState, action) => {
                 users: action.users
             }
         case SET_PAGE:
-            return  {
+            return {
                 ...state,
                 currentPage: action.pageNum
             }
@@ -52,6 +54,13 @@ const usersReducer = (state = initialState, action) => {
         case IS_FETCHING:
             return {
                 ...state, isFetching: action.isFetching
+            }
+        case FETCHING_IN_PROGRESS:
+            return {
+                ...state,
+                fetchingInProgress: action.isFetching ?
+                    [...state.fetchingInProgress, action.userId]
+                    : [...state.fetchingInProgress.filter(id => id !== action.userId)]
             }
         default:
             return state
@@ -64,5 +73,6 @@ export const setUsers = (users) => ({type: SET_USERS, users: users})
 export const setPage = (pageNum) => ({type: SET_PAGE, pageNum: pageNum})
 export const setTotalPage = (totalPage) => ({type: SET_TOTAL_PAGE, totalPage})
 export const setIsFetching = (isFetching) => ({type: IS_FETCHING, isFetching})
+export const setFetchingInProgress = (isFetching, userId) => ({type: FETCHING_IN_PROGRESS, isFetching, userId})
 
 export default usersReducer

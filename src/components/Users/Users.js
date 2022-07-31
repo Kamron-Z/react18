@@ -3,6 +3,7 @@ import userPhoto from "../../assest/images/userIcon.png";
 import React from "react";
 import {NavLink} from "react-router-dom";
 import axios from "axios";
+import {userApi} from "../../api/api";
 
 const Users = (props) => {
     let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize)
@@ -32,26 +33,24 @@ const Users = (props) => {
                     <div>{u.name}</div>
                     {
                         u.followed ?
-                            <button onClick={() => {
-                                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
-                                    withCredentials: true, headers: {'API-KEY': '1872b366-9534-436e-b8ef-8cb260d3e39e'}
-                                })
-                                    .then(res => {
-                                        if (res.data.resultCode === 0) {
+                            <button disabled={props.fetchingInProgress.some(id => id === u.id)} onClick={() => {
+                                props.setFetchingInProgress(true, u.id)
+                                userApi.onUnFollow(u.id)
+                                    .then(data => {
+                                        if (data.resultCode === 0) {
                                             props.unfollow(u.id)
                                         }
+                                        props.setFetchingInProgress(false, u.id)
                                     })
                             }}>unfollow</button> :
-                            <button onClick={() => {
-                                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
-                                    withCredentials: true,
-                                    headers: {'API-KEY': '1872b366-9534-436e-b8ef-8cb260d3e39e'}
+                            <button disabled={props.fetchingInProgress.some(id => id === u.id)} onClick={() => {
+                                props.setFetchingInProgress(true, u.id)
+                                userApi.onFollow(u.id).then(data => {
+                                    if (data.resultCode === 0) {
+                                        props.follow(u.id)
+                                    }
+                                    props.setFetchingInProgress(false, u.id)
                                 })
-                                    .then(res => {
-                                        if (res.data.resultCode === 0) {
-                                            props.follow(u.id)
-                                        }
-                                    })
 
                             }}>follow</button>
                     }
