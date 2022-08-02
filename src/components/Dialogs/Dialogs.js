@@ -1,6 +1,7 @@
 import classes from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogsItem";
 import MessageItem from "./MessageItem/MessageItem";
+import {Navigate} from "react-router-dom";
 
 const Dialogs = (props) => {
     let dialogsElements = props.state.dialogs.map(d => <DialogItem name={d.name} id={d.id} key={d.id}/>)

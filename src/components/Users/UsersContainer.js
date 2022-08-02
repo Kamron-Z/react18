@@ -1,36 +1,29 @@
 import {connect} from "react-redux";
 import {
-    follow,
+    follow, followThunk, getUsers,
     setFetchingInProgress,
     setIsFetching,
     setPage,
     setTotalPage,
     setUsers,
-    unFollow
+    unFollow, unFollowThunk
 } from "../../redux/users-reducer";
 import React from "react";
 import Users from "./Users";
 import Preloader from "../../common/Preloader/Preloader";
 import {userApi} from "../../api/api";
+import withRedirect from "../../Hook/withRedirect";
+import {compose} from "redux";
 
 class UsersApiContainer extends React.Component {
 
     componentDidMount() {
-        this.props.setIsFetching(true)
-        userApi.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
-            this.props.setIsFetching(false)
-            this.props.setUsers(data.items)
-            // this.props.setTotalPage(res.data.totalCount)
-        })
+        this.props.getUsers(this.props.currentPage, this.props.pageSize)
     }
 
     onChangePage = (pageNumber) => {
         this.props.setPage(pageNumber)
-        this.props.setIsFetching(true)
-        userApi.getUsers(pageNumber, this.props.pageSize).then(data => {
-            this.props.setIsFetching(false)
-            this.props.setUsers(data.items)
-        })
+        this.props.getUsers(pageNumber, this.props.pageSize)
     }
 
     render() {
@@ -40,10 +33,9 @@ class UsersApiContainer extends React.Component {
                                                                pageSize={this.props.pageSize}
                                                                currentPage={this.props.currentPage}
                                                                users={this.props.users}
-                                                               unfollow={this.props.unFollow}
-                                                               follow={this.props.follow}
                                                                onChangePage={this.onChangePage}
-                                                               setFetchingInProgress={this.props.setFetchingInProgress}
+                                                               unFollowThunk={this.props.unFollowThunk}
+                                                               followThunk={this.props.followThunk}
                                                                fetchingInProgress={this.props.fetchingInProgress}
                 />}
 
@@ -60,13 +52,15 @@ const mapStateToProps = (state) => {
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        fetchingInProgress: state.usersPage.fetchingInProgress
+        fetchingInProgress: state.usersPage.fetchingInProgress,
+        isFetching: state.usersPage.isFetching
     }
 }
 
-let UsersContainer = connect(mapStateToProps, {
-    follow, unFollow, setUsers, setPage, setTotalPage, setIsFetching, setFetchingInProgress
-})(UsersApiContainer)
-
-export default UsersContainer
+export default compose(
+    connect(mapStateToProps, {
+        setPage, setTotalPage, setIsFetching,
+        getUsers, followThunk, unFollowThunk
+    }),
+    withRedirect
+)(UsersApiContainer)

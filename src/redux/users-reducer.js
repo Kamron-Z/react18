@@ -1,3 +1,5 @@
+import {userApi} from "../api/api";
+
 const FOLLOW = "FOLLOW"
 const UNFOLLOW = "UNFOLLOW"
 const SET_USERS = "SET_USERS"
@@ -9,7 +11,7 @@ const FETCHING_IN_PROGRESS = "FETCHING_IN_PROGRESS"
 let initialState = {
     users: [],
     pageSize: 5,
-    totalUsersCount: 19,
+    totalUsersCount: 30,
     currentPage: 1,
     isFetching: false,
     fetchingInProgress: []
@@ -74,5 +76,38 @@ export const setPage = (pageNum) => ({type: SET_PAGE, pageNum: pageNum})
 export const setTotalPage = (totalPage) => ({type: SET_TOTAL_PAGE, totalPage})
 export const setIsFetching = (isFetching) => ({type: IS_FETCHING, isFetching})
 export const setFetchingInProgress = (isFetching, userId) => ({type: FETCHING_IN_PROGRESS, isFetching, userId})
+
+
+export const getUsers = (currentPage, pageSize) => (dispatch) => {
+    dispatch(setIsFetching(true))
+    userApi.getUsers(currentPage, pageSize).then(data => {
+        dispatch(setIsFetching(false))
+        dispatch(setUsers(data.items))
+        //dispatch(setTotalPage(data.totalCount))
+    })
+}
+
+export const followThunk = (userId) => (dispatch) => {
+    dispatch(setFetchingInProgress(true, userId))
+    userApi.onFollow(userId)
+        .then(data => {
+            if (data.resultCode === 0) {
+                dispatch(follow(userId))
+            }
+            dispatch(setFetchingInProgress(false, userId))
+        })
+}
+
+export const unFollowThunk = (userId) => (dispatch) => {
+    dispatch(setFetchingInProgress(true, userId))
+    userApi.onUnFollow(userId)
+        .then(data => {
+            if (data.resultCode === 0) {
+                dispatch(unFollow(userId))
+            }
+            dispatch(setFetchingInProgress(false, userId))
+        })
+}
+
 
 export default usersReducer
