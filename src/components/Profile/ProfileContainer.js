@@ -1,10 +1,9 @@
 import React from 'react'
 import Profile from "./Profile";
 import {connect} from "react-redux";
-import {getProfile, getStatus, updateStatus} from "../../redux/profile-reducer";
+import {addPostApi, getProfile, getStatus, updateStatus} from "../../redux/profile-reducer";
 import withRouter from "../../Hook/withRouter";
 import {compose} from "redux";
-
 
 class ProfileContainer extends React.Component {
 
@@ -24,12 +23,13 @@ class ProfileContainer extends React.Component {
 let mapStateToProps = (state) => {
     return {
         profile: state.profilePage.profile,
-        status: state.profilePage.status
+        status: state.profilePage.status,
+        posts: state.profilePage.posts
     }
 }
 
 export default compose(
-    connect(mapStateToProps, {getProfile, getStatus, updateStatus}),
+    connect(mapStateToProps, {getProfile, getStatus, updateStatus, addPostApi}),
     // withRedirect,
     withRouter,
 )(ProfileContainer)

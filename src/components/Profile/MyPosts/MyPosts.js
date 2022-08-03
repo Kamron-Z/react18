@@ -1,26 +1,14 @@
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
+import AddPostForm from "../../../Form/AddPostForm";
+
 
 const MyPosts = (props) => {
     let postsElements = props.posts.map(p => <Post message={p.message} likeCount={p.likeCount} key={p.id}/>)
 
-    let changePost = (e) => {
-        let text = e.target.value
-        props.updatePostText(text)
-    }
-
-    let addPost = () => {
-        props.addPost()
-    }
-
     return (
         <div>
-            <div>
-                <div><input onChange={changePost} type="text" value={props.newPostText}/></div>
-                <div>
-                    <button onClick={addPost}>Add post</button>
-                </div>
-            </div>
+            <AddPostForm addPostApi={props.addPostApi}/>
             <div>
                 {postsElements}
             </div>
@@ -29,3 +17,4 @@ const MyPosts = (props) => {
 }
 
 export default MyPosts;
+

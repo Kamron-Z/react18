@@ -1,4 +1,4 @@
-import {addMessageAC, updateMessageTextAC} from "../../redux/dialogs-reducer";
+import {addMessageApi} from "../../redux/dialogs-reducer";
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
 import withRedirect from "../../Hook/withRedirect";
@@ -11,18 +11,7 @@ let mapStateToProps = (state) => {
     }
 }
 
-let mapDispatchToProps = (dispatch) => {
-    return {
-        sendMessage: () => {
-            dispatch(addMessageAC())
-        },
-        updateMessage: (text) => {
-            dispatch(updateMessageTextAC(text))
-        }
-    }
-}
-
 export default compose(
     withRedirect,
-    connect(mapStateToProps, mapDispatchToProps))
+    connect(mapStateToProps, {addMessageApi}))
 (Dialogs);
