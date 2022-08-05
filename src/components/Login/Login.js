@@ -1,15 +1,22 @@
 import {Field, Formik} from "formik";
+import {connect} from "react-redux";
+import {login} from "../../redux/auth-reducer";
+import {Navigate} from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
+    if (props.isAuth) {
+        return <Navigate to='/profile'/>
+    }
+
     return (
         <div>
             <h1>Login</h1>
-            <LoginForm/>
+            <LoginForm {...props}/>
         </div>
     )
 }
 
-const LoginForm = () => {
+const LoginForm = (props) => {
     return (
         <Formik
             initialValues={{email: '', password: '', isRemember: false}}
@@ -24,8 +31,8 @@ const LoginForm = () => {
             //     }
             //     return errors;
             // }}
-            onSubmit={(values, {setSubmitting}) => {
-                alert(values.email)
+            onSubmit={(values, {setSubmitting,setSubmit }) => {
+                props.login(values.email, values.password, values.isRemember)
                 setSubmitting(false)
             }}
         >
@@ -47,6 +54,7 @@ const LoginForm = () => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.email}
+                            placeholder='email'
                         />
                     </div>
                     {errors.email && touched.email && errors.email}
@@ -57,11 +65,13 @@ const LoginForm = () => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.password}
+                            placeholder='password'
                         />
                     </div>
                     <div>
                         <Field type="checkbox" name='isRemember' checked={values.isRemember}/>
                     </div>
+                    {props.errors && <div>{props.errors}</div>}
                     {errors.password && touched.password && errors.password}
                     <button type="submit" disabled={isSubmitting}>
                         Login
@@ -72,4 +82,9 @@ const LoginForm = () => {
     )
 }
 
-export default Login
+const mapStateToProps = (state) => ({
+    isAuth: state.auth.isAuth,
+    errors: state.auth.errors
+})
+
+export default connect(mapStateToProps, {login})(Login)
