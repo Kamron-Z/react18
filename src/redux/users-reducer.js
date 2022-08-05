@@ -78,7 +78,7 @@ export const setIsFetching = (isFetching) => ({type: IS_FETCHING, isFetching})
 export const setFetchingInProgress = (isFetching, userId) => ({type: FETCHING_IN_PROGRESS, isFetching, userId})
 
 
-export const getUsers = (currentPage, pageSize) => (dispatch) => {
+export const requestUsers = (currentPage, pageSize) => (dispatch) => {
     dispatch(setIsFetching(true))
     userApi.getUsers(currentPage, pageSize).then(data => {
         dispatch(setIsFetching(false))

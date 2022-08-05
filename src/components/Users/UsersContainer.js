@@ -1,29 +1,33 @@
 import {connect} from "react-redux";
 import {
-    follow, followThunk, getUsers,
-    setFetchingInProgress,
+    followThunk, requestUsers,
     setIsFetching,
     setPage,
     setTotalPage,
-    setUsers,
-    unFollow, unFollowThunk
+    unFollowThunk
 } from "../../redux/users-reducer";
 import React from "react";
 import Users from "./Users";
 import Preloader from "../../common/Preloader/Preloader";
-import {userApi} from "../../api/api";
-import withRedirect from "../../Hook/withRedirect";
 import {compose} from "redux";
+import {
+    getFetching,
+    getIsFetching,
+    getPage,
+    getSizeUsersPage,
+    getTotalPage,
+    getUsers
+} from "../../redux/users-reselects";
 
 class UsersApiContainer extends React.Component {
 
     componentDidMount() {
-        this.props.getUsers(this.props.currentPage, this.props.pageSize)
+        this.props.requestUsers(this.props.currentPage, this.props.pageSize)
     }
 
     onChangePage = (pageNumber) => {
         this.props.setPage(pageNumber)
-        this.props.getUsers(pageNumber, this.props.pageSize)
+        this.props.requestUsers(pageNumber, this.props.pageSize)
     }
 
     render() {
@@ -48,19 +52,18 @@ class UsersApiContainer extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        fetchingInProgress: state.usersPage.fetchingInProgress,
-        isFetching: state.usersPage.isFetching
+        users: getUsers(state),
+        pageSize: getSizeUsersPage(state),
+        totalUsersCount: getTotalPage(state),
+        currentPage: getPage(state),
+        fetchingInProgress: getFetching(state),
+        isFetching: getIsFetching(state)
     }
 }
 
 export default compose(
     connect(mapStateToProps, {
         setPage, setTotalPage, setIsFetching,
-        getUsers, followThunk, unFollowThunk
-    }),
-    withRedirect
+        requestUsers, followThunk, unFollowThunk
+    })
 )(UsersApiContainer)

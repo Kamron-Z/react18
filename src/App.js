@@ -6,10 +6,25 @@ import UsersContainer from "./components/Users/UsersContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
+import {Component} from "react";
+import {connect} from "react-redux";
+import {getInitialazed} from "./redux/app-reducer";
+import Preloader from "./common/Preloader/Preloader";
+import {compose} from "redux";
+import withRouter from "./Hook/withRouter";
 
-const App = (props) => {
-    return (
-        <BrowserRouter>
+class App extends Component {
+    componentDidMount() {
+        this.props.getInitialazed()
+    }
+
+    render() {
+
+        if (!this.props.initialazed) {
+            return <Preloader/>
+        }
+
+        return (
             <div className="App">
                 <HeaderContainer/>
                 <Navbar/>
@@ -24,8 +39,17 @@ const App = (props) => {
                     </Routes>
                 </div>
             </div>
-        </BrowserRouter>
-    );
+        );
+    }
 }
 
-export default App;
+let mapStateToProps = (state) => ({
+    initialazed: state.app.initialazed
+})
+
+export default compose(
+    connect(mapStateToProps, {getInitialazed}),
+    withRouter
+)(App)
+
+

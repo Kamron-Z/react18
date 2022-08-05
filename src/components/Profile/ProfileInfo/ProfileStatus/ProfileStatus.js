@@ -1,4 +1,5 @@
 import React from 'react'
+import Preloader from "../../../../common/Preloader/Preloader";
 
 class ProfileStatus extends React.Component {
 
@@ -21,11 +22,11 @@ class ProfileStatus extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.state.status !== this.props.status) {
-            this.setState({
-                status: this.props.status
-            })
-        }
+        // if (this.state.status !== this.props.status) {
+        //     this.setState({
+        //         status: this.props.status
+        //     })
+        // }
     }
 
     onChangeStateStatus = (e) => {
@@ -35,8 +36,8 @@ class ProfileStatus extends React.Component {
     }
 
     render() {
-        return (
 
+        return (
             <div>
                 <div><img src={this.props.profile.photos.small} alt=""/></div>
                 <div>{this.props.profile.fullName}</div>
