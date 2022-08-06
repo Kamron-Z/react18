@@ -1,60 +1,46 @@
-import React from 'react'
-import Preloader from "../../../../common/Preloader/Preloader";
+import React, {useEffect, useState} from 'react'
+import {updateStatus} from "../../../../redux/profile-reducer";
 
-class ProfileStatus extends React.Component {
+const ProfileStatus = (props) => {
 
-    state = {
-        editMode: false,
-        status: this.props.status
+    let [editMode, setEditMode] = useState(false)
+    let [status, setStatus] = useState(props.status)
+
+    useEffect(() => {
+        setStatus(props.status)
+    }, [props.status])
+
+    const activeEditMode = () => {
+        setEditMode(true)
     }
 
-    activeEditMode = () => {
-        this.setState({
-            editMode: true
-        })
+    const deActiveEditMode = () => {
+        setEditMode(false)
+        props.updateStatus(status)
     }
 
-    deActiveEditMode = () => {
-        this.setState({
-            editMode: false
-        })
-        this.props.updateStatus(this.state.status)
+    const onChangeStateStatus = (e) => {
+        setStatus(e.target.value)
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        // if (this.state.status !== this.props.status) {
-        //     this.setState({
-        //         status: this.props.status
-        //     })
-        // }
-    }
-
-    onChangeStateStatus = (e) => {
-        this.setState({
-            status: e.currentTarget.value
-        })
-    }
-
-    render() {
-
-        return (
+    return (
+        <div>
+            <div><img src={props.profile.photos.small} alt=""/></div>
+            <div>{props.profile.fullName}</div>
             <div>
-                <div><img src={this.props.profile.photos.small} alt=""/></div>
-                <div>{this.props.profile.fullName}</div>
-                <div>
-                    {!this.state.editMode &&
-                        <div><span onDoubleClick={this.activeEditMode}>{this.state.status || 'not status'}</span></div>
-                    }
-                    {this.state.editMode &&
-                        <div><input autoFocus={true} onChange={this.onChangeStateStatus} onBlur={this.deActiveEditMode}
-                                    type="text"
-                                    value={this.state.status}/></div>
-                    }
-                </div>
+                {!editMode &&
+                    <div><span onDoubleClick={activeEditMode}>{status || 'not status'}</span></div>
+                }
+                {editMode &&
+                    <div><input autoFocus={true} onChange={onChangeStateStatus} onBlur={deActiveEditMode}
+                                type="text"
+                                value={status}/></div>
+                }
             </div>
+        </div>
 
-        );
-    }
+    );
+
 }
 
 export default ProfileStatus;
